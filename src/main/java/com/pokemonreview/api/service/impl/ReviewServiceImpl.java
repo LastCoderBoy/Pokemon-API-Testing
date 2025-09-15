@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
-    private ReviewRepository reviewRepository;
-    private PokemonRepository pokemonRepository;
+    private final ReviewRepository reviewRepository;
+    private final PokemonRepository pokemonRepository;
 
     @Autowired
     public ReviewServiceImpl(ReviewRepository reviewRepository, PokemonRepository pokemonRepository) {
