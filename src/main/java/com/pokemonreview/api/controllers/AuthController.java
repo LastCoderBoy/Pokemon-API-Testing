@@ -64,8 +64,13 @@ public class AuthController {
         user.setUsername(registerDto.getUsername());
         user.setPassword(passwordEncoder.encode((registerDto.getPassword())));
 
-        Role roles = roleRepository.findByName("USER").get();
-        user.setRoles(Collections.singletonList(roles));
+        Role userRole = roleRepository.findByName("USER")
+                .orElseGet(() -> {
+                    Role newRole = new Role();
+                    newRole.setName("USER");
+                    return roleRepository.save(newRole);
+                });
+        user.setRoles(Collections.singletonList(userRole));
 
         userRepository.save(user);
 
