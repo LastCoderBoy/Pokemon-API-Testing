@@ -1,5 +1,7 @@
 package com.pokemonreview.api.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +12,9 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserEntity {
 
     @Id
