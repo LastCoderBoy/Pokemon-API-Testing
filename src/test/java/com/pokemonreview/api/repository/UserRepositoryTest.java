@@ -2,7 +2,6 @@ package com.pokemonreview.api.repository;
 
 import com.pokemonreview.api.Utils.UserUtils;
 import com.pokemonreview.api.models.UserEntity;
-import org.aspectj.lang.annotation.Before;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,7 @@ public class UserRepositoryTest {
     private UserEntity userD;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository repositoryUnderTest;
 
     @BeforeEach
     public void setup(){
@@ -34,12 +33,12 @@ public class UserRepositoryTest {
 
     @Test
     public void testFindByUsername_ReturnUserEntity(){
-        userRepository.save(userA);
-        userRepository.save(userB);
-        userRepository.save(userC);
+        repositoryUnderTest.save(userA);
+        repositoryUnderTest.save(userB);
+        repositoryUnderTest.save(userC);
 
         // Act
-        Optional<UserEntity> actualResponseOpt = userRepository.findByUsername(userB.getUsername());
+        Optional<UserEntity> actualResponseOpt = repositoryUnderTest.findByUsername(userB.getUsername());
 
         // Assert
         if(actualResponseOpt.isPresent()){
@@ -51,12 +50,12 @@ public class UserRepositoryTest {
 
     @Test
     public void testFindByUsername_ReturnEmpty(){
-        userRepository.save(userA);
-        userRepository.save(userB);
-        userRepository.save(userC);
+        repositoryUnderTest.save(userA);
+        repositoryUnderTest.save(userB);
+        repositoryUnderTest.save(userC);
 
         // Act
-        Optional<UserEntity> actualResponseOpt = userRepository.findByUsername(userD.getUsername());
+        Optional<UserEntity> actualResponseOpt = repositoryUnderTest.findByUsername(userD.getUsername());
 
         // Assert
         Assertions.assertThat(actualResponseOpt).isEmpty();
@@ -64,12 +63,12 @@ public class UserRepositoryTest {
 
     @Test
     public void testExistsByUsername_ReturnTrue(){
-        userRepository.save(userA);
-        userRepository.save(userB);
-        userRepository.save(userC);
+        repositoryUnderTest.save(userA);
+        repositoryUnderTest.save(userB);
+        repositoryUnderTest.save(userC);
 
         // Act
-        Boolean actualCondition = userRepository.existsByUsername(userC.getUsername());
+        Boolean actualCondition = repositoryUnderTest.existsByUsername(userC.getUsername());
 
         // Assert
         Assertions.assertThat(actualCondition).isTrue();
@@ -77,12 +76,12 @@ public class UserRepositoryTest {
 
     @Test
     public void testExistsByUsername_ReturnFalse(){
-        userRepository.save(userA);
-        userRepository.save(userB);
-        userRepository.save(userC);
+        repositoryUnderTest.save(userA);
+        repositoryUnderTest.save(userB);
+        repositoryUnderTest.save(userC);
 
         // Act
-        Boolean actualCondition = userRepository.existsByUsername(userD.getUsername());
+        Boolean actualCondition = repositoryUnderTest.existsByUsername(userD.getUsername());
 
         // Assert
         Assertions.assertThat(actualCondition).isFalse();

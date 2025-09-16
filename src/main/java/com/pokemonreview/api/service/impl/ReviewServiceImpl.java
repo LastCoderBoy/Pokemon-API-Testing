@@ -47,16 +47,9 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ReviewDto getReviewById(int reviewId, int pokemonId) {
-        Pokemon pokemon = pokemonRepository.findById(pokemonId).orElseThrow(() -> new PokemonNotFoundException("Pokemon with associated review not found"));
-
-        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFoundException("Review with associate pokemon not found"));
-
-        if(review.getPokemon().getId() != pokemon.getId()) {
-            throw new ReviewNotFoundException("This review does not belond to a pokemon");
-        }
-
-        return mapToDto(review);
+    public List<ReviewDto> getAllReviews() {
+        List<Review> reviews = reviewRepository.findAll();
+        return reviews.stream().map(this::mapToDto).collect(Collectors.toList());
     }
 
     @Override
@@ -72,6 +65,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.setTitle(reviewDto.getTitle());
         review.setContent(reviewDto.getContent());
         review.setStars(reviewDto.getStars());
+        review.setPokemon(pokemon);
 
         Review updateReview = reviewRepository.save(review);
 
@@ -97,6 +91,7 @@ public class ReviewServiceImpl implements ReviewService {
         reviewDto.setTitle(review.getTitle());
         reviewDto.setContent(review.getContent());
         reviewDto.setStars(review.getStars());
+        reviewDto.setPokemonId(review.getPokemon().getId());
         return reviewDto;
     }
 

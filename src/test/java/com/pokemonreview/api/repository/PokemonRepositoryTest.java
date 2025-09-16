@@ -24,7 +24,7 @@ public class PokemonRepositoryTest {
 
 
     @Autowired
-    private PokemonRepository pokemonRepository;
+    private PokemonRepository repositoryUnderTest;
 
     @BeforeEach
     public void setup() {
@@ -37,7 +37,7 @@ public class PokemonRepositoryTest {
     @Test
     public void testSavePokemonEntity_ReturnPokemonEntity() {
         // Act
-        Pokemon savedPokemon = pokemonRepository.save(pokemonA);
+        Pokemon savedPokemon = repositoryUnderTest.save(pokemonA);
 
         // Assert
         Assertions.assertThat(savedPokemon).isNotNull();
@@ -46,13 +46,13 @@ public class PokemonRepositoryTest {
 
     @Test
     public void testFindAllPokemon_ReturnPokemonList() {
-        pokemonRepository.save(pokemonA);
-        pokemonRepository.save(pokemonB);
-        pokemonRepository.save(pokemonC);
-        pokemonRepository.save(pokemonD);
+        repositoryUnderTest.save(pokemonA);
+        repositoryUnderTest.save(pokemonB);
+        repositoryUnderTest.save(pokemonC);
+        repositoryUnderTest.save(pokemonD);
 
         // Act
-        List<Pokemon> actualResultList = pokemonRepository.findAll();
+        List<Pokemon> actualResultList = repositoryUnderTest.findAll();
 
         // Assert
         Assertions.assertThat(actualResultList).isNotNull();
@@ -63,13 +63,13 @@ public class PokemonRepositoryTest {
 
     @Test
     public void testFindByIdPokemon_ReturnPokemonEntity() {
-        pokemonRepository.save(pokemonA);
-        pokemonRepository.save(pokemonB);
-        pokemonRepository.save(pokemonC);
+        repositoryUnderTest.save(pokemonA);
+        repositoryUnderTest.save(pokemonB);
+        repositoryUnderTest.save(pokemonC);
 
         // Act
         System.out.println("Saved PokemonA ID: " + pokemonA.getId());
-        Optional<Pokemon> actualPokemonEntity = pokemonRepository.findById(pokemonA.getId());
+        Optional<Pokemon> actualPokemonEntity = repositoryUnderTest.findById(pokemonA.getId());
 
         // Assert
         if(actualPokemonEntity.isPresent()) {
@@ -84,11 +84,11 @@ public class PokemonRepositoryTest {
 
     @Test
     public void testFindByTypePokemon_ReturnPokemonEntity() {
-        pokemonRepository.save(pokemonA);
-        pokemonRepository.save(pokemonD);
+        repositoryUnderTest.save(pokemonA);
+        repositoryUnderTest.save(pokemonD);
 
         // Act
-        Optional<Pokemon> actualPokemonEntity = pokemonRepository.findByType(pokemonD.getType());
+        Optional<Pokemon> actualPokemonEntity = repositoryUnderTest.findByType(pokemonD.getType());
         if(actualPokemonEntity.isPresent()) {
             Assertions.assertThat(actualPokemonEntity.get().getName()).isEqualTo("Squirtle");
             Assertions.assertThat(actualPokemonEntity.get().getType()).isEqualTo("Water");
@@ -100,16 +100,16 @@ public class PokemonRepositoryTest {
     @Test
     public void testUpdatePokemonEntity_ReturnPokemonEntity() {
         // Arrange
-        pokemonRepository.save(pokemonA);
-        pokemonRepository.save(pokemonB);
+        repositoryUnderTest.save(pokemonA);
+        repositoryUnderTest.save(pokemonB);
 
-        Optional<Pokemon> pokemonEntityOpt = pokemonRepository.findById(pokemonA.getId());
+        Optional<Pokemon> pokemonEntityOpt = repositoryUnderTest.findById(pokemonA.getId());
         pokemonEntityOpt.ifPresent(
                 pokemonEntity -> pokemonEntity.setName("Charmander")
         );
 
         // Act
-        Pokemon updatedPokemon = pokemonRepository.save(pokemonEntityOpt.get());
+        Pokemon updatedPokemon = repositoryUnderTest.save(pokemonEntityOpt.get());
 
         // Assert
         Assertions.assertThat(updatedPokemon).isNotNull();
@@ -120,16 +120,16 @@ public class PokemonRepositoryTest {
 
     @Test
     public void testDeletePokemonEntity_ReturnPokemonIsEmpty() {
-        pokemonRepository.save(pokemonA);
-        pokemonRepository.save(pokemonB);
-        pokemonRepository.save(pokemonC);
+        repositoryUnderTest.save(pokemonA);
+        repositoryUnderTest.save(pokemonB);
+        repositoryUnderTest.save(pokemonC);
 
-        List<Pokemon> entityListBeforeDelete = pokemonRepository.findAll();
+        List<Pokemon> entityListBeforeDelete = repositoryUnderTest.findAll();
 
         // Act
-        pokemonRepository.deleteById(pokemonC.getId());
-        List<Pokemon> entityListAfterDelete = pokemonRepository.findAll();
-        Optional<Pokemon> deletedPokemon = pokemonRepository.findById(pokemonC.getId());
+        repositoryUnderTest.deleteById(pokemonC.getId());
+        List<Pokemon> entityListAfterDelete = repositoryUnderTest.findAll();
+        Optional<Pokemon> deletedPokemon = repositoryUnderTest.findById(pokemonC.getId());
 
         // Assert
         Assertions.assertThat(deletedPokemon).isEmpty();

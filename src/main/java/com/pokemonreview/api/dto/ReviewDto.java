@@ -14,4 +14,5 @@ public class ReviewDto {
     private String title;
     private String content;
     private int stars;
+    private int pokemonId;
 }
