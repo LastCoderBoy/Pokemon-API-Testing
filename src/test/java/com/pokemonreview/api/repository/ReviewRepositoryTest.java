@@ -97,6 +97,8 @@ public class ReviewRepositoryTest {
         repositoryUnderTest.save(reviewA);
         repositoryUnderTest.save(reviewB);
 
+        String previousContent = reviewA.getContent(); // Used to Fail
+
         Review entityToBeUpdated = repositoryUnderTest.findById(reviewA.getId()).get();
 
         String newContent = "Updated Content";
