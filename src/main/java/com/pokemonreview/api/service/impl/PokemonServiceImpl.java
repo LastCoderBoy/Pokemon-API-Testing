@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,8 +28,7 @@ public class PokemonServiceImpl implements PokemonService {
     @Override
     public PokemonDto createPokemon(PokemonDto pokemonDto) {
         Pokemon pokemon = new Pokemon();
-        pokemon.setName(pokemonDto.getName());
-        pokemon.setType(pokemonDto.getType());
+        mapToEntity(pokemon, pokemonDto);
 
         Pokemon newPokemon = pokemonRepository.save(pokemon);
 
@@ -66,9 +66,7 @@ public class PokemonServiceImpl implements PokemonService {
     @Override
     public PokemonDto updatePokemon(PokemonDto pokemonDto, int id) {
         Pokemon pokemon = pokemonRepository.findById(id).orElseThrow(() -> new PokemonNotFoundException("Pokemon could not be updated"));
-
-        pokemon.setName(pokemonDto.getName());
-        pokemon.setType(pokemonDto.getType());
+        mapToEntity(pokemon, pokemonDto);
 
         Pokemon updatedPokemon = pokemonRepository.save(pokemon);
         return mapToDto(updatedPokemon);
@@ -88,10 +86,8 @@ public class PokemonServiceImpl implements PokemonService {
         return pokemonDto;
     }
 
-    private Pokemon mapToEntity(PokemonDto pokemonDto) {
-        Pokemon pokemon = new Pokemon();
+    private void mapToEntity(Pokemon pokemon, PokemonDto pokemonDto) {
         pokemon.setName(pokemonDto.getName());
         pokemon.setType(pokemonDto.getType());
-        return pokemon;
     }
 }
