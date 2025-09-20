@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,7 +66,11 @@ public class ReviewServiceImpl implements ReviewService {
         review.setTitle(reviewDto.getTitle());
         review.setContent(reviewDto.getContent());
         review.setStars(reviewDto.getStars());
-        review.setPokemon(pokemon);
+        if (reviewDto.getPokemonId() != pokemonId) {
+            Pokemon newPokemon = pokemonRepository.findById(reviewDto.getPokemonId())
+                    .orElseThrow(() -> new PokemonNotFoundException("New pokemon not found"));
+            review.setPokemon(newPokemon);
+        }
 
         Review updateReview = reviewRepository.save(review);
 
@@ -74,12 +79,11 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public void deleteReview(int pokemonId, int reviewId) {
-        Pokemon pokemon = pokemonRepository.findById(pokemonId).orElseThrow(() -> new PokemonNotFoundException("Pokemon with associated review not found"));
-
         Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFoundException("Review with associate pokemon not found"));
 
-        if(review.getPokemon().getId() != pokemon.getId()) {
-            throw new ReviewNotFoundException("This review does not belong to a pokemon");
+        // Check if the review belongs to the correct pokemon using the ID
+        if (review.getPokemon() == null || review.getPokemon().getId() != pokemonId) {
+            throw new ReviewNotFoundException("This review does not belong to the specified pokemon");
         }
 
         reviewRepository.delete(review);
